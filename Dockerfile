@@ -11,4 +11,4 @@ EXPOSE 8765
 
 HEALTHCHECK CMD python -c "import urllib.request; urllib.request.urlopen('http://localhost:8765/')" || exit 1
 
-CMD ["solara", "run", "app.py", "--host=0.0.0.0", "--port=8765"]
+CMD ["solara", "run", "app.py", "--host=0.0.0.0", "--port=8765", "--production"]

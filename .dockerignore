@@ -5,8 +5,6 @@ __pycache__/
 *.py[cod]
 *.egg-info/
 
-data/*.csv
-
 .git/
 .github/
 .gitignore
@@ -16,7 +14,9 @@ notebooks/*.html
 
 docs/
 
-.streamlit/secrets.toml
-
 *.tmp
 *.log
+
+data/*.csv
+.solara/
+README.md

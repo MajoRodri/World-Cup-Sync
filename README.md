@@ -3,15 +3,15 @@
 
   # World Cup Sync
 
-  **Plataforma de Analítica para Datos del Mundial de Fútbol FIFA · 1930–2022**
+  **Plataforma de Analítica para el Mundial FIFA · Histórico 1930–2022 + Oportunidad 2026**
 
   [![Python](https://img.shields.io/badge/Python-3.10%2B-3776AB?logo=python&logoColor=white)](https://python.org)
-  [![Streamlit](https://img.shields.io/badge/Streamlit-1.32%2B-FF4B4B?logo=streamlit&logoColor=white)](https://streamlit.io)
-  [![Plotly](https://img.shields.io/badge/Plotly-5.18%2B-3F4F75?logo=plotly&logoColor=white)](https://plotly.com)
-  [![Pandas](https://img.shields.io/badge/Pandas-2.0%2B-150458?logo=pandas&logoColor=white)](https://pandas.pydata.org)
+  [![Solara](https://img.shields.io/badge/Solara-1.57.4-CDFF00?logoColor=black)](https://solara.dev)
+  [![Plotly](https://img.shields.io/badge/Plotly-6.8.0-3F4F75?logo=plotly&logoColor=white)](https://plotly.com)
+  [![Pandas](https://img.shields.io/badge/Pandas-3.0.3-150458?logo=pandas&logoColor=white)](https://pandas.pydata.org)
   [![Docker](https://img.shields.io/badge/Docker-Hub-2496ED?logo=docker&logoColor=white)](https://hub.docker.com/r/majorodri/world-cup-sync)
 
-  *Inteligencia operativa para planificación de CDN en streaming y gestión de Fan Zones urbanas*
+  *Inteligencia operativa para Streaming CDN · Fan Zones urbanas · Oportunidad presencial 2026*
 </div>
 
 ---
@@ -31,64 +31,116 @@
 
 ## Descripción General
 
-World Cup Sync es un dashboard de analítica interactivo construido con **Streamlit** que expone 92 años de datos del Mundial FIFA (1930–2022) para dos casos de uso operativos principales:
+**World Cup Sync** es un dashboard de analítica interactivo construido con **Solara** que combina 92 años de datos históricos del Mundial FIFA (1930–2022) con un análisis prospectivo del torneo en curso. La plataforma está diseñada para responder preguntas de negocio concretas en dos frentes:
 
-- **Operaciones de Streaming** — predecir la demanda de ancho de banda CDN a partir de patrones de densidad de goles.
-- **Fan Zones Urbanas** — pronosticar la saturación de afluencia y dimensionar la seguridad en sedes de transmisión en vivo.
+- **Operaciones de Streaming** — predecir la demanda de ancho de banda CDN a partir de patrones históricos de densidad de goles por partido.
+- **Fan Zones Urbanas** — pronosticar saturación de afluencia y dimensionar seguridad en sedes de transmisión en vivo.
+- **Oportunidad comercial 2026** — identificar los 13 puntos de concentración masiva de fans en Norteamérica, cruzando demanda histórica probada con la escala de los Fan Festivals 2026.
+
+La app sigue una estructura narrativa de consultoría: los primeros 5 tabs cuentan la historia del pasado (análisis histórico) y el sexto tab presenta el cierre accionable orientado a directivos (la oportunidad 2026).
 
 ---
 
-## Funcionalidades
+## Tabs del Dashboard
 
-| Módulo | Enfoque | Salida Clave |
-|--------|---------|--------------|
-| 📊 Resumen Ejecutivo | Tendencia de goles + historial de ediciones | Pronóstico de demanda CDN, tarjetas editoriales |
-| 🌆 Fan Zones & Venues | Asistencia por ciudad y estadio | Probabilidad de saturación de afluencia |
-| 🏅 Análisis por Fase | Riesgo dual por fase del torneo | Picos simultáneos de espectáculo y afluencia |
-| 🌍 Equipos | Ataque / defensa / ranking de equipos | Scatter de posicionamiento táctico |
-| 🔍 Match Explorer | Base de datos de partidos individuales | Registros de partidos filtrados y ordenables |
+| Tab | Pregunta de negocio | Salida clave |
+|-----|---------------------|--------------|
+| 📊 Resumen Ejecutivo | ¿Cómo ha evolucionado el espectáculo goleador en 92 años? | Forecast CDN, tendencia animada, tarjetas por edición |
+| 🌆 Fan Zones y Venues | ¿Qué ciudades concentran mayor presión de afluencia? | Ranking top 12 ciudades, P75/P90 saturación, top 10 estadios |
+| 🏅 Análisis por Fase | ¿En qué fases converge máximo espectáculo y máxima afluencia? | Riesgo simultáneo, mapa de calor Año × Fase |
+| 🌍 Equipos | ¿Cómo se posicionan los equipos ofensiva y defensivamente? | Ranking goleador, scatter táctico, tabla completa |
+| 🔍 Match Explorer | ¿Cuál fue el partido más explosivo bajo ciertos filtros? | Tabla de partidos filtrable y ordenable |
+| 🗺️ Oportunidad 2026 | ¿Dónde están los 13 puntos de mayor concentración de fans en 2026? | Mapa interactivo, demanda histórica por ciudad, benchmark comparativo |
 
-<details>
-<summary><strong>Ver detalle de cada módulo y KPIs</strong></summary>
-
-### 5 KPIs Principales (siempre visibles)
+### KPIs principales (siempre visibles en la parte superior)
 
 | KPI | Descripción |
 |-----|-------------|
-| ⚽ Partidos Analizados | Total de partidos en el período seleccionado |
-| 📺 Espectáculo Digital | Promedio de goles por partido (proxy de ancho de banda CDN) |
-| 🏟️ Pico de Afluencia | Mayor asistencia en un solo partido + contexto |
-| 🔥 Mayor Goleada Histórica | La goleada más grande jamás registrada |
+| ⚽ Partidos Analizados | Total de partidos en el período y filtros seleccionados |
+| 📺 Goles / Partido | Promedio de goles por partido — proxy directo de demanda CDN |
+| 🏟️ Pico de Afluencia | Mayor asistencia registrada en un solo partido + contexto del partido |
+| 🔥 Mayor Goleada Histórica | La goleada más grande de los datos filtrados |
 | 🏅 Edición Más Golera | Edición con el mayor promedio de goles por partido |
 
-### 📊 Resumen Ejecutivo
+---
 
-- **Gráfico de evolución de goles** — línea + área con media móvil de 3 ediciones y anotación del campeón por edición
-- **Tarjetas de inteligencia por edición** — sede, campeón, subcampeón, goleador y asistencia total de cada Mundial
-- **Insight CDN** — identifica el pico histórico de goles por partido para dimensionar ancho de banda
+## Detalle de cada tab
 
-### 🌆 Fan Zones & Venues
+<details>
+<summary><strong>📊 Resumen Ejecutivo</strong></summary>
 
-- **Top 12 ciudades por asistencia promedio** con récord individual por ciudad
-- **Histograma de saturación de streaming** — distribución de goles/partido con umbrales P75 y P90
-- **Histograma de saturación de Fan Zone** — distribución de asistencia con alertas de presión de afluencia
-- **Benchmarks de estadios** — top 10 venues ordenados por utilización promedio de capacidad
+- **Evolución de goles** — gráfico animado (▶/⏸) de línea + área con media móvil de 3 ediciones, rango min/max y anotaciones del campeón por edición
+- **Tarjetas de inteligencia** — una card por edición con sede, campeón, subcampeón, goleador y asistencia total del torneo
+- **Insight CDN** — identifica el pico histórico y sugiere filtrar a 2010–2022 para proyecciones operativas precisas
 
-### 🏅 Análisis por Fase
+</details>
 
-- **Gráfico de doble eje** — goles por fase (barras) superpuesto con asistencia promedio (línea), destacando fases de riesgo simultáneo
-- **Mapa de calor Año × Fase** — intensidad de goles por partido en cada edición y fase del torneo
+<details>
+<summary><strong>🌆 Fan Zones y Venues</strong></summary>
 
-### 🌍 Equipos
+- **Top 12 ciudades por afluencia promedio** — gráfico animado de barras horizontales con pico individual por ciudad
+- **Probabilidad de saturación streaming** — histograma de goles/partido con umbrales P75 y P90 como alertas CDN
+- **Probabilidad de saturación Fan Zone** — histograma de asistencia con umbral P75 como alerta operativa
+- **Top 10 estadios** — benchmarks de afluencia promedio por recinto, con colorscale azul→lima
 
-- **Ranking ofensivo** — top 15 equipos por promedio de goles por partido
-- **Scatter de posicionamiento táctico** — cuadrante ataque vs. defensa con burbuja proporcional a partidos jugados
-- **Tabla de rendimiento completa** — victorias, empates, derrotas, GF, GC, diferencial y promedios ordenables
+</details>
 
-### 🔍 Match Explorer
+<details>
+<summary><strong>🏅 Análisis por Fase</strong></summary>
 
-- Filtro por mínimo de goles, mínima asistencia y criterio de ordenamiento
-- Tabla completa: año, fase, equipos, marcador, goles, asistencia, ciudad y estadio
+- **Eje dual por fase** — barras de goles promedio (eje izquierdo, escala lima) superpuestas con línea de afluencia (eje derecho, azul), identificando fases de riesgo simultáneo
+- **Mapa de calor Año × Fase** — intensidad de goles por partido en cada combinación edición/fase; colorscale de azul oscuro a rojo pasando por lima
+
+</details>
+
+<details>
+<summary><strong>🌍 Equipos</strong></summary>
+
+- **Ranking ofensivo** — top 15 equipos por promedio de goles por partido, con barra animada
+- **Scatter de posicionamiento táctico** — cuadrante ataque vs. defensa con burbuja proporcional a partidos jugados; divide el espacio en cuatro arquetipos: Dominadores, Sólidos, Entretenidos y Vulnerables
+- **Tabla completa de rendimiento** — victorias, empates, derrotas, GF, GC, diferencial y promedios, filtrable y ordenable
+
+</details>
+
+<details>
+<summary><strong>🔍 Match Explorer</strong></summary>
+
+- Controles de filtro: mínimo de goles por partido, mínima asistencia, criterio de ordenamiento
+- Tabla completa exportable: año, fase, equipos, marcador, goles totales, asistencia, ciudad y estadio
+
+</details>
+
+<details>
+<summary><strong>🗺️ Oportunidad 2026 — Tab de cierre ejecutivo</strong></summary>
+
+Este tab es el **cierre narrativo** del dashboard. Responde la pregunta: *"¿Dónde y cómo se materializa la oportunidad del Mundial 2026?"*. No usa filtros del sidebar — su contenido es independiente y siempre completo.
+
+**Estructura:**
+
+1. **Hero narrativo** — encuadra el análisis como prospectiva comercial: 13 puntos de concentración masiva en Norteamérica.
+
+2. **Mapa interactivo de Norteamérica** — 13 pines coloreados por país (🇲🇽 lima / 🇨🇦 rojo / 🇺🇸 azul). Filtros por país con toggle. Clic en un pin → selecciona esa ciudad.
+
+3. **Detalle de ciudad seleccionada** — dos columnas:
+   - *Izquierda*: info del Fan Festival (ubicación, fechas, capacidad estimada, highlights, restricciones de acceso, si requiere registro previo)
+   - *Derecha*: historial FIFA de esa ciudad si existe en el dataset (KPIs de promedio/pico/partidos + gráfico animado por edición). Si la ciudad nunca fue sede → card de "mercado virgen" con framing de primer movedor.
+
+4. **Benchmark comparativo** — gráfico animado de barras horizontales: afluencia histórica promedio por ciudad (barras coloreadas por país) superpuesta con marcadores de capacidad estimada del Fan Festival 2026 (línea lima). Permite ver de un vistazo qué ciudades tienen demanda comprobada vs. cuáles son nuevos mercados.
+
+5. **Matriz de acceso** — tabla completa con las 13 ciudades: registro requerido, zona VIP disponible, capacidad estimada por día y tipo de acceso. Identifica las ciudades de mayor potencial de monetización premium.
+
+**Ciudades con historial FIFA comprobado en el dataset:**
+
+| Ciudad | Ediciones | Datos |
+|--------|-----------|-------|
+| Ciudad de México | 1970, 1986 | `Mexico City` en CSV |
+| Guadalajara | 1970, 1986 | `Guadalajara` en CSV |
+| Monterrey | 1970, 1986 | `Monterrey` en CSV |
+| Boston | 1994 | `Boston` en CSV |
+| Los Ángeles | 1994 | `Los Angeles` en CSV |
+| Nueva York | 1994 | `New York/New Jersey` en CSV |
+
+Las otras 7 ciudades (Toronto, Vancouver, Atlanta, Houston, Kansas City, Miami, Filadelfia) son nuevas sedes sin historial FIFA → se muestran como "mercados vírgenes".
 
 </details>
 
@@ -96,11 +148,11 @@ World Cup Sync es un dashboard de analítica interactivo construido con **Stream
 
 ## Cómo funciona la app
 
-La app tiene dos modos de ejecución según si los datos reales están disponibles o no. **Ambos modos son completamente funcionales** — todos los filtros, gráficos e interacciones funcionan igual en los dos.
+La app tiene dos modos según si los datos están disponibles. **Ambos son completamente funcionales** — todos los filtros, animaciones e interacciones funcionan igual en los dos.
 
 ### Modo 1 — Con datos reales (entorno local)
 
-Los datasets originales son privados y no se incluyen en el repositorio ni en la imagen Docker. Para ejecutar la app con datos reales hay que seguir este pipeline:
+Los datasets originales son privados y no se incluyen en el repositorio ni en la imagen Docker.
 
 ```
 data/matches.csv  +  data/world_cup.csv
@@ -114,35 +166,35 @@ notebooks/EDA.ipynb
          ↓
 data/matches_limpio.csv
          │
-         │  CSV depurado generado por el notebook
-         │  Tampoco se sube (está en .gitignore)
+         │  CSV depurado generado por el notebook (también privado)
          ↓
-streamlit run app.py  →  App con datos reales completos
+solara run app.py  →  App con datos reales completos
 ```
 
-### Modo 2 — Sin datos / Modo Demo (Docker Hub)
+### Modo 2 — Modo Demo (Docker Hub / sin CSV)
 
-Cuando los CSVs no están presentes, la app activa automáticamente el **Modo Demo**. Está diseñado para que cualquier persona pueda evaluar la app sin necesitar acceso al dataset privado.
+Cuando los CSVs no están presentes, la app activa automáticamente el **Modo Demo**. Está diseñado para que cualquier persona pueda evaluar la app sin acceso al dataset privado.
 
 ```
-docker pull majorodri/world-cup-sync
-docker run -p 8501:8501 majorodri/world-cup-sync
+app.py busca matches_limpio.csv → no encontrado
          │
-         │  app.py busca matches_limpio.csv → no encontrado
          ↓
 data/demo_data.py  (ya viene dentro de la imagen Docker)
          │
          │  Genera 858 partidos con el mismo esquema exacto
+         │  usando distribuciones estadísticas reales (Poisson)
          ↓
-App funciona con banner "Modo Demo 🔒"
+App funciona con banner "⚠️ Modo Demo"
 ```
+
+> **Nota sobre el tab Oportunidad 2026:** sus datos son 100% estáticos (hardcodeados en el código). Funciona igual en Modo Demo y con datos reales. Los datos históricos del historial por ciudad sí dependen del CSV.
 
 ### Sobre los datos del Modo Demo
 
 Los datos del Modo Demo **no son inventados** — provienen del dataset real:
 
-- **Datos 100% reales:** campeones, subcampeones, goleadores históricos, sedes, ciudades y estadios de cada edición FIFA (1930–2022).
-- **Generados sintéticamente:** únicamente las estadísticas partido a partido (goles y asistencia por match), manteniendo distribuciones estadísticas realistas mediante modelos de Poisson.
+- **100% reales:** campeones, subcampeones, sedes, ciudades y estadios históricos de cada edición FIFA (1930–2022).
+- **Sintéticos:** únicamente las estadísticas partido a partido (goles y asistencia por match), generadas con distribuciones Poisson que respetan los promedios históricos reales.
 
 <details>
 <summary><strong>Ver cobertura del Modo Demo y tabla de archivos por entorno</strong></summary>
@@ -162,7 +214,7 @@ Los datos del Modo Demo **no son inventados** — provienen del dataset real:
 |---------|:------:|:----------:|-------------|
 | `data/matches.csv` | ❌ | ❌ | Dataset original (privado) |
 | `data/world_cup.csv` | ❌ | ❌ | Dataset original (privado) |
-| `data/matches_limpio.csv` | ❌ | ❌ | Generado por el notebook EDA |
+| `data/matches_limpio.csv` | ❌ | ❌ | Generado por EDA.ipynb |
 | `data/demo_data.py` | ✅ | ✅ | Datos demo empaquetados |
 | `notebooks/EDA.ipynb` | ✅ | ❌ | Análisis exploratorio |
 | `app.py` | ✅ | ✅ | Aplicación principal |
@@ -196,25 +248,25 @@ pip install -r requirements.txt
 jupyter notebook notebooks/EDA.ipynb
 
 # 6. Lanzar la app
-streamlit run app.py
+solara run app.py
 ```
 
-La app se abrirá en `http://localhost:8501`.
+La app se abrirá en `http://localhost:8765`.
 
 ---
 
 ## Instalación con Docker (Modo Demo)
 
-Forma recomendada para evaluar la app sin necesitar los datos originales. Solo requiere tener [Docker Desktop](https://www.docker.com/products/docker-desktop/) instalado.
+Forma recomendada para evaluar la app sin necesitar los datos originales. Solo requiere [Docker Desktop](https://www.docker.com/products/docker-desktop/).
 
 ### Opción A — Desde Docker Hub ✅ recomendado
 
 ```bash
 docker pull majorodri/world-cup-sync
-docker run -p 8501:8501 majorodri/world-cup-sync
+docker run -p 8765:8765 majorodri/world-cup-sync
 ```
 
-Abrir `http://localhost:8501`. La app inicia en Modo Demo automáticamente.
+Abrir `http://localhost:8765`. La app inicia en Modo Demo automáticamente.
 
 ### Opción B — Construir la imagen localmente
 
@@ -222,7 +274,7 @@ Abrir `http://localhost:8501`. La app inicia en Modo Demo automáticamente.
 git clone https://github.com/MajoRodri/World-Cup-Sync.git
 cd World-Cup-Sync
 docker build -t world-cup-sync .
-docker run -p 8501:8501 world-cup-sync
+docker run -p 8765:8765 world-cup-sync
 ```
 
 ### Opción C — Con datos reales montados
@@ -230,10 +282,10 @@ docker run -p 8501:8501 world-cup-sync
 Si tienes los CSVs y quieres usarlos con Docker:
 
 ```bash
-docker run -p 8501:8501 -v ./data:/app/data majorodri/world-cup-sync
+docker run -p 8765:8765 -v ./data:/app/data majorodri/world-cup-sync
 ```
 
-Docker monta la carpeta `data/` local dentro del contenedor y la app usa los datos reales en vez del modo demo.
+Docker monta la carpeta `data/` local dentro del contenedor y la app usa los datos reales.
 
 ---
 
@@ -242,28 +294,43 @@ Docker monta la carpeta `data/` local dentro del contenedor y la app usa los dat
 
 ```
 World-Cup-Sync/
-├── app.py                        # Aplicación principal de Streamlit
-├── Dockerfile                    # Definición de la imagen Docker
-├── requirements.txt              # Dependencias de Python
-├── .gitignore                    # Excluye CSVs privados y entornos virtuales
-├── .dockerignore                 # Excluye CSVs, env/, notebooks del build
-├── .streamlit/
-│   └── config.toml               # Tema oscuro + configuración del servidor
+├── app.py                         # Entrypoint de Solara (importa app/page.py)
+├── Dockerfile                     # Imagen Docker
+├── requirements.txt               # Dependencias Python (versiones fijadas)
+├── .gitignore                     # Excluye CSVs privados y entornos virtuales
+├── .dockerignore                  # Excluye env/, notebooks y CSVs del build
 ├── .github/
 │   └── workflows/
-│       └── deploy-notebooks.yml  # GitHub Actions → publica HTMLs en Pages
+│       └── deploy-notebooks.yml   # CI/CD: publica HTMLs en GitHub Pages
+├── app/
+│   ├── page.py                    # Componente raíz: sidebar, hero, KPIs y tabs
+│   ├── constants.py               # Paleta de colores, BASE_LAYOUT, APP_CSS, play_menu
+│   ├── data.py                    # Carga de datos (local → Drive → demo)
+│   ├── components/
+│   │   ├── __init__.py
+│   │   ├── ui_blocks.py           # QBlock, InsightBox, ScoreBadge, plotly_iframe
+│   │   ├── kpi_cards.py           # KPICard
+│   │   └── sidebar.py             # AppSidebar (filtros año, fase, equipo)
+│   └── pages/
+│       ├── __init__.py
+│       ├── resumen.py             # Tab 1 — Resumen Ejecutivo
+│       ├── fanzones.py            # Tab 2 — Fan Zones y Venues
+│       ├── fases.py               # Tab 3 — Análisis por Fase
+│       ├── equipos.py             # Tab 4 — Equipos
+│       ├── explorer.py            # Tab 5 — Match Explorer
+│       └── festivales.py          # Tab 6 — Oportunidad 2026 (Fan Festivals)
 ├── data/
-│   ├── demo_data.py              # Datos demo empaquetados (incluido en Docker)
-│   ├── matches.csv               # Dataset original — NO se sube (privado)
-│   ├── world_cup.csv             # Dataset original — NO se sube (privado)
-│   └── matches_limpio.csv        # Generado por EDA.ipynb — NO se sube
+│   ├── demo_data.py               # Generador de datos demo (incluido en Docker)
+│   ├── matches.csv                # Dataset original — NO se sube (privado)
+│   ├── world_cup.csv              # Dataset original — NO se sube (privado)
+│   └── matches_limpio.csv         # Generado por EDA.ipynb — NO se sube
 ├── docs/
-│   └── LogoWorldCup.png          # Logo de la app
+│   └── LogoWorldCup.png           # Logo de la app
 └── notebooks/
-    ├── EDA.ipynb                 # Limpieza y análisis → genera matches_limpio.csv
-    ├── EDA.html                  # EDA exportado (publicado en GitHub Pages)
-    ├── Sesgos.ipynb              # Análisis de sesgos históricos
-    └── Sesgos.html               # Sesgos exportado (publicado en GitHub Pages)
+    ├── EDA.ipynb                  # Limpieza y análisis → genera matches_limpio.csv
+    ├── EDA.html                   # EDA exportado (publicado en GitHub Pages)
+    ├── Sesgos.ipynb               # Análisis de sesgos históricos
+    └── Sesgos.html                # Sesgos exportado (publicado en GitHub Pages)
 ```
 
 </details>
@@ -273,25 +340,29 @@ World-Cup-Sync/
 
 ### Stack
 
-| Capa | Tecnología |
-|------|-----------|
-| Framework UI | [Streamlit](https://streamlit.io) 1.32+ |
-| Procesamiento de Datos | [Pandas](https://pandas.pydata.org) 2.0+, [NumPy](https://numpy.org) 1.24+ |
-| Visualizaciones | [Plotly](https://plotly.com/python/) 5.18+ |
-| Contenedores | [Docker](https://www.docker.com/) |
-| CI/CD | GitHub Actions → GitHub Pages |
-| Notebooks | Jupyter |
+| Capa | Tecnología | Versión |
+|------|-----------|---------|
+| Framework UI | [Solara](https://solara.dev) | 1.57.4 |
+| Visualizaciones | [Plotly](https://plotly.com/python/) | 6.8.0 |
+| Procesamiento de datos | [Pandas](https://pandas.pydata.org) | 3.0.3 |
+| Álgebra numérica | [NumPy](https://numpy.org) | 2.4.6 |
+| Widgets reactivos | ipyvuetify, ipywidgets | 1.11.3 / 8.1.8 |
+| Servidor ASGI | uvicorn + starlette | 0.49.0 / 1.2.1 |
+| Contenedores | Docker | — |
+| CI/CD | GitHub Actions → GitHub Pages | — |
 
 ### Esquema de datos
 
-**Fuente:** [FIFA Football World Cup — Kaggle](https://www.kaggle.com/datasets/piterfm/fifa-football-world-cup)
+**Fuente histórica:** [FIFA Football World Cup — Kaggle (piterfm)](https://www.kaggle.com/datasets/piterfm/fifa-football-world-cup)
 
-| Archivo | Descripción | Columnas Clave |
-|---------|-------------|----------------|
-| `matches_limpio.csv` | Más de 1,000 partidos depurados | year, stage_clean, home_team, away_team, home_goals, away_goals, total_goals, attendance, city, stadium |
-| `world_cup.csv` | Metadata por edición | Year, Host, Champion, Runner-Up, TopScorrer, Attendance, Matches |
+| Archivo | Registros | Columnas clave |
+|---------|-----------|----------------|
+| `matches_limpio.csv` | ~1,000+ partidos | `year`, `stage_clean`, `home_team`, `away_team`, `home_goals`, `away_goals`, `total_goals`, `attendance`, `city`, `stadium` |
+| `world_cup.csv` | 22 ediciones | `Year`, `Host`, `Champion`, `Runner-Up`, `TopScorer`, `Attendance`, `Matches` |
 
-> **Nota de Gobernanza de Datos:** Las cifras de asistencia anteriores a 1970 pueden contener inconsistencias metodológicas. Para proyecciones operativas se recomienda filtrar a **2010–2022**.
+**Fuente prospectiva (Tab 6):** datos del Fan Festival 2026 hardcodeados en `app/pages/festivales.py` — ubicaciones, fechas, capacidad estimada, requisitos de acceso y artistas confirmados para las 13 ciudades sede.
+
+> **Nota de Gobernanza:** Las cifras de asistencia anteriores a 1970 pueden contener inconsistencias metodológicas. Para proyecciones operativas se recomienda filtrar a **2010–2022** usando el slider del sidebar.
 
 </details>
 
@@ -300,40 +371,43 @@ World-Cup-Sync/
 
 ### La app no abre en el navegador
 
-Verifica que Streamlit esté corriendo y accede manualmente a `http://localhost:8501`. Si el puerto está ocupado:
+Verifica que Solara esté corriendo y accede a `http://localhost:8765`. Si el puerto está ocupado:
 
 ```bash
-streamlit run app.py --server.port 8502
+solara run app.py --port 8766
 ```
 
-### Error: `matches_limpio.csv` no encontrado (instalación local)
+### Error: `matches_limpio.csv` no encontrado
 
-El CSV limpio se genera ejecutando el notebook EDA. Asegúrate de:
-1. Tener `data/matches.csv` y `data/world_cup.csv` en la carpeta `data/`
-2. Haber ejecutado **todas** las celdas de `notebooks/EDA.ipynb`
-3. Verificar que `data/matches_limpio.csv` fue creado
+El CSV limpio se genera ejecutando el notebook EDA. Verifica que:
+1. Tienes `data/matches.csv` y `data/world_cup.csv`
+2. Ejecutaste **todas** las celdas de `notebooks/EDA.ipynb`
+3. El archivo `data/matches_limpio.csv` fue creado
 
-Si no tienes los CSVs originales, la app entra automáticamente en **Modo Demo**.
+Si no tienes los CSVs originales, la app entra automáticamente en **Modo Demo** — esto es el comportamiento esperado.
 
 ### Docker: el contenedor no arranca
 
 ```bash
-docker logs <container_id>   # ver qué falló
-docker ps                    # ver contenedores corriendo
+docker logs <container_id>   # ver el error
+docker ps                    # ver contenedores activos
 docker stop $(docker ps -q)  # detener todos
 ```
 
-### Docker: puerto 8501 ya en uso
+### Docker: puerto 8765 ya en uso
 
 ```bash
-docker run -p 8502:8501 majorodri/world-cup-sync
+docker run -p 8766:8765 majorodri/world-cup-sync
+# abrir http://localhost:8766
 ```
-
-Luego abrir `http://localhost:8502`.
 
 ### El Modo Demo muestra un banner de aviso
 
-Es el comportamiento esperado. El banner `⚠️ Modo Demo` confirma que la app está corriendo con datos demo porque no encontró los CSVs privados. Todos los filtros y visualizaciones funcionan normalmente.
+Es el comportamiento correcto. El banner `⚠️ Modo Demo` confirma que la app no encontró los CSVs privados y está usando datos sintéticos. Todos los filtros y visualizaciones funcionan normalmente, excepto que el Tab 6 mostrará "Sin historial" para todas las ciudades (ya que no hay datos reales cargados).
+
+### Gráficos no renderizan / pantalla en blanco
+
+Prueba con Chrome o Firefox actualizados. Si el problema persiste, limpia la caché del navegador (`Ctrl+Shift+R`).
 
 ### Dependencias desactualizadas
 
@@ -341,17 +415,13 @@ Es el comportamiento esperado. El banner `⚠️ Modo Demo` confirma que la app 
 pip install --upgrade -r requirements.txt
 ```
 
-### Gráficos no renderizan / pantalla en blanco
-
-Prueba con Chrome o Firefox. Streamlit no es compatible con Internet Explorer. Si el problema persiste, limpia la caché del navegador.
-
 </details>
 
 ---
 
 ## Licencia
 
-Este proyecto es de uso interno / analítico únicamente. Todos los datos del Mundial FIFA se utilizan con fines educativos y de investigación.
+Este proyecto es de uso interno / analítico. Los datos históricos del Mundial FIFA se utilizan con fines educativos y de investigación.
 
 ---
 

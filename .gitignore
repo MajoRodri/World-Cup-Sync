@@ -214,8 +214,8 @@ marimo/_static/
 marimo/_lsp/
 __marimo__/
 
-# Streamlit
-.streamlit/secrets.toml
+# Solara
+.solara/
 
 # Datos privados
 data/*.csv

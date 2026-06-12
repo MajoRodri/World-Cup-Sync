@@ -10,6 +10,7 @@
   [![Plotly](https://img.shields.io/badge/Plotly-6.8.0-3F4F75?logo=plotly&logoColor=white)](https://plotly.com)
   [![Pandas](https://img.shields.io/badge/Pandas-3.0.3-150458?logo=pandas&logoColor=white)](https://pandas.pydata.org)
   [![Docker](https://img.shields.io/badge/Docker-Hub-2496ED?logo=docker&logoColor=white)](https://hub.docker.com/r/majorodri/world-cup-sync)
+  [![Live Demo](https://img.shields.io/badge/Live%20Demo-Render-46E3B7?logo=render&logoColor=white)](https://world-cup-sync.onrender.com)
 
   *Inteligencia operativa para Streaming CDN · Fan Zones urbanas · Oportunidad presencial 2026*
 </div>
@@ -18,7 +19,9 @@
 
 ## Demo
 
-> Video próximamente — ¡mantente al tanto!
+**App en vivo:** [https://world-cup-sync.onrender.com](https://world-cup-sync.onrender.com)
+
+> Desplegada en Render. Si el servidor está inactivo puede tardar ~30 segundos en despertar en la primera carga.
 
 ### Notebooks publicados
 

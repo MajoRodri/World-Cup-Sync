@@ -12,6 +12,39 @@ from app.constants import (
 from app.components import QBlock, InsightBox, plotly_iframe
 
 
+_HOST_FLAGS: dict[str, str] = {
+    "Uruguay":              "🇺🇾",
+    "Italy":                "🇮🇹",
+    "France":               "🇫🇷",
+    "Brazil":               "🇧🇷",
+    "Switzerland":          "🇨🇭",
+    "Sweden":               "🇸🇪",
+    "Chile":                "🇨🇱",
+    "England":              "🏴󠁧󠁢󠁥󠁮󠁧󠁿",
+    "United Kingdom":       "🇬🇧",
+    "Mexico":               "🇲🇽",
+    "West Germany":         "🇩🇪",
+    "Germany":              "🇩🇪",
+    "Argentina":            "🇦🇷",
+    "Spain":                "🇪🇸",
+    "United States":        "🇺🇸",
+    "USA":                  "🇺🇸",
+    "South Korea / Japan":  "🇰🇷🇯🇵",
+    "Japan":                "🇯🇵",
+    "Korea Republic":       "🇰🇷",
+    "South Africa":         "🇿🇦",
+    "Russia":               "🇷🇺",
+    "Qatar":                "🇶🇦",
+}
+
+
+def _host_flag(host: str) -> str:
+    for key, flag in _HOST_FLAGS.items():
+        if key.lower() in host.lower():
+            return flag
+    return "🌍"
+
+
 @solara.component
 def Tab1_ResumenEjecutivo(df: pd.DataFrame, wc: pd.DataFrame, year_range: tuple):
     QBlock("01", "📺 Streaming · Planificación CDN y pauta premium",
@@ -124,6 +157,86 @@ def Tab1_ResumenEjecutivo(df: pd.DataFrame, wc: pd.DataFrame, year_range: tuple)
         f"filtra 2010–2022 para proyecciones operativas.", "red"
     )
 
+    solara.HTML("div", unsafe_innerHTML=f"""
+        <details style="margin-top:20px;">
+            <summary style="cursor:pointer;list-style:none;display:flex;align-items:center;
+                gap:10px;padding:12px 16px;
+                border:1px solid {COLOR_RED}50;border-radius:8px;
+                background:rgba(232,0,45,0.05);user-select:none;">
+                <span style="font-size:1.1rem;">⚠️</span>
+                <span style="font-size:.75rem;font-weight:700;color:{COLOR_RED};
+                    text-transform:uppercase;letter-spacing:1.5px;">
+                    Gobernanza de Datos &amp; Sesgos Identificados
+                </span>
+                <span style="font-size:.62rem;color:{COLOR_MUTED};margin-left:auto;">
+                    Expandir ▾
+                </span>
+            </summary>
+            <div style="border:1px solid {COLOR_RED}40;border-top:none;border-radius:0 0 8px 8px;
+                padding:16px 18px 14px;background:rgba(232,0,45,0.03);">
+                <p style="font-size:.62rem;color:{COLOR_MUTED};margin:0 0 12px;">
+                    Limitaciones críticas del dataset — leer antes de tomar decisiones estratégicas
+                </p>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px;">
+                    <div style="background:rgba(232,0,45,0.07);border:1px solid rgba(232,0,45,0.35);
+                        border-radius:8px;padding:12px 14px;">
+                        <div style="font-size:.70rem;font-weight:700;color:{COLOR_RED};margin-bottom:4px;">
+                            🔴 Sesgo Temporal — CRÍTICO
+                        </div>
+                        <div style="font-size:.61rem;color:{COLOR_MUTED};line-height:1.75;">
+                            La media global (2.82 g/p) sobreestima la era streaming en
+                            <b style="color:#F8FAFC">+9.9%</b>.
+                            Filtrar a <b style="color:{COLOR_LIME}">2010–2022</b> para proyecciones CDN.
+                        </div>
+                    </div>
+                    <div style="background:rgba(232,0,45,0.07);border:1px solid rgba(232,0,45,0.35);
+                        border-radius:8px;padding:12px 14px;">
+                        <div style="font-size:.70rem;font-weight:700;color:{COLOR_RED};margin-bottom:4px;">
+                            🔴 Sesgo de Formato — CRÍTICO
+                        </div>
+                        <div style="font-size:.61rem;color:{COLOR_MUTED};line-height:1.75;">
+                            Ediciones 1930–1950 tenían 17–22 partidos vs. 64 actuales (CV &gt; 60%).
+                            Comparar solo ediciones <b style="color:{COLOR_LIME}">≥ 52 partidos (1982+)</b>.
+                        </div>
+                    </div>
+                    <div style="background:rgba(232,0,45,0.07);border:1px solid rgba(232,0,45,0.35);
+                        border-radius:8px;padding:12px 14px;">
+                        <div style="font-size:.70rem;font-weight:700;color:{COLOR_RED};margin-bottom:4px;">
+                            🔴 Sesgo de Asistencia — CRÍTICO
+                        </div>
+                        <div style="font-size:.61rem;color:{COLOR_MUTED};line-height:1.75;">
+                            Datos pre-1966 sin auditoría oficial. Récord Maracanã 1950
+                            (<b style="color:#F8FAFC">173,850 esp.</b>) no verificado.
+                            Filtrar <b style="color:{COLOR_LIME}">post-1970</b> para Fan Zones.
+                        </div>
+                    </div>
+                    <div style="background:rgba(205,255,0,0.04);border:1px solid rgba(205,255,0,0.25);
+                        border-radius:8px;padding:12px 14px;">
+                        <div style="font-size:.70rem;font-weight:700;color:{COLOR_LIME};margin-bottom:4px;">
+                            🟡 Sesgo Geográfico — ALTO
+                        </div>
+                        <div style="font-size:.61rem;color:{COLOR_MUTED};line-height:1.75;">
+                            Europa representa el <b style="color:#F8FAFC">53.4%</b> de participaciones históricas.
+                            África y Asia con representación suficiente solo desde
+                            <b style="color:{COLOR_LIME}">2002</b>.
+                        </div>
+                    </div>
+                </div>
+                <div style="display:flex;align-items:center;justify-content:space-between;
+                    padding:8px 12px;background:{COLOR_NAVY};border-radius:6px;">
+                    <span style="font-size:.59rem;color:{COLOR_MUTED};">
+                        Análisis completo: 8 sesgos identificados, cuantificados y con mitigaciones
+                    </span>
+                    <a href="https://majorodri.github.io/World-Cup-Sync/Sesgos.html"
+                       target="_blank" style="font-size:.61rem;font-weight:700;color:{COLOR_LIME};
+                       text-decoration:none;white-space:nowrap;margin-left:12px;">
+                       Notebook de Sesgos ↗
+                    </a>
+                </div>
+            </div>
+        </details>
+    """)
+
     if not wc.empty:
         wc_period = (wc[wc["Year"].between(*year_range)]
                      .sort_values("Year", ascending=False))
@@ -144,6 +257,7 @@ def Tab1_ResumenEjecutivo(df: pd.DataFrame, wc: pd.DataFrame, year_range: tuple)
                         runup = str(r.get("Runner-Up", "")).strip()
                         att   = r.get("Attendance", 0)
                         mtch  = r.get("Matches", "?")
+                        flag  = _host_flag(host)
                         try:
                             att_f = (f"{int(att)/1e6:.1f}M"
                                      if int(att) >= 1_000_000 else f"{int(att):,}")
@@ -157,6 +271,9 @@ def Tab1_ResumenEjecutivo(df: pd.DataFrame, wc: pd.DataFrame, year_range: tuple)
                                 line-height:1.9;margin-bottom:8px;position:relative;overflow:hidden;">
                                 <div style="position:absolute;right:-6px;bottom:-10px;
                                     font-size:3.5rem;opacity:.04;pointer-events:none;">🏆</div>
+                                <div style="position:absolute;top:10px;right:12px;
+                                    font-size:1.55rem;line-height:1;pointer-events:none;">
+                                    {flag}</div>
                                 <div style="font-size:1.4rem;font-weight:900;
                                     color:{COLOR_LIME};line-height:1.1;">{yr}</div>
                                 <div style="font-size:.65rem;color:{COLOR_MUTED};

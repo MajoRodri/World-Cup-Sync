@@ -14,6 +14,21 @@ from app.constants import (
 from app.components import QBlock, InsightBox, plotly_iframe
 
 
+def _kde(data: np.ndarray, n_pts: int = 250):
+    """Gaussian KDE using Silverman's bandwidth rule (no scipy dependency)."""
+    data = np.asarray(data, dtype=float)
+    n = len(data)
+    if n < 5:
+        return np.array([]), np.array([])
+    h = 1.06 * data.std() * n ** (-0.2)
+    if h == 0:
+        return np.array([]), np.array([])
+    x = np.linspace(data.min() - h, data.max() + h, n_pts)
+    kde = (np.exp(-0.5 * ((x[:, None] - data[None, :]) / h) ** 2)
+           .sum(axis=1)) / (n * h * np.sqrt(2 * np.pi))
+    return x, kde
+
+
 @solara.component
 def Tab2_FanZones(df: pd.DataFrame):
     with solara.Columns([1, 1]):
@@ -99,10 +114,20 @@ def Tab2_FanZones(df: pd.DataFrame):
 
                     fig3a = go.Figure(go.Histogram(
                         x=df["total_goals"], nbinsx=18,
-                        marker=dict(color=COLOR_RED, opacity=.82,
+                        histnorm="probability density",
+                        name="Distribución histórica",
+                        marker=dict(color=COLOR_RED, opacity=.72,
                                     line=dict(color=COLOR_NAVY, width=.8)),
-                        hovertemplate="Goles/partido: %{x}<br>Encuentros: %{y}<extra></extra>",
+                        hovertemplate="Goles/partido: %{x}<br>Densidad: %{y:.4f}<extra></extra>",
                     ))
+                    kde_x, kde_y = _kde(df["total_goals"].dropna().values)
+                    if len(kde_x):
+                        fig3a.add_trace(go.Scatter(
+                            x=kde_x, y=kde_y, mode="lines",
+                            name="Curva de Densidad KDE",
+                            line=dict(color=COLOR_LIME, width=2.5),
+                            hovertemplate="Densidad KDE: %{y:.4f}<extra></extra>",
+                        ))
                     for xv, lbl, col in [(m_g,  f"Media: {m_g:.1f}",  "#F8FAFC"),
                                           (q75g, f"P75: {q75g:.0f}",  COLOR_MUTED),
                                           (q90g, f"P90: {q90g:.0f}",  COLOR_LIME)]:
@@ -112,9 +137,14 @@ def Tab2_FanZones(df: pd.DataFrame):
                     fig3a.update_layout(**BASE_LAYOUT,
                         xaxis=dict(title="Goles por Partido", showgrid=False, dtick=1,
                                    tickfont=dict(size=9, color=COLOR_MUTED)),
-                        yaxis=dict(title="Encuentros", showgrid=True, gridcolor="#1C2840",
+                        yaxis=dict(title="Densidad de Probabilidad", showgrid=True,
+                                   gridcolor="#1C2840",
                                    tickfont=dict(size=10, color=COLOR_MUTED)),
-                        showlegend=False, height=300, bargap=.08)
+                        legend=dict(orientation="h", yanchor="bottom", y=1.02,
+                                    xanchor="right", x=1,
+                                    bgcolor="rgba(0,0,0,0)",
+                                    font=dict(color=COLOR_MUTED, size=9)),
+                        showlegend=True, height=300, bargap=.08)
                     solara.FigurePlotly(fig3a)
                     InsightBox(
                         f"📺 <b>{psat:.1f}%</b> de partidos superan media+1σ "
@@ -133,10 +163,20 @@ def Tab2_FanZones(df: pd.DataFrame):
 
                         fig3b = go.Figure(go.Histogram(
                             x=dfa["attendance"], nbinsx=22,
-                            marker=dict(color=COLOR_BLUE, opacity=.82,
+                            histnorm="probability density",
+                            name="Distribución histórica",
+                            marker=dict(color=COLOR_BLUE, opacity=.72,
                                         line=dict(color=COLOR_NAVY, width=.8)),
-                            hovertemplate="Espectadores: %{x:,.0f}<br>Encuentros: %{y}<extra></extra>",
+                            hovertemplate="Espectadores: %{x:,.0f}<br>Densidad: %{y:.2e}<extra></extra>",
                         ))
+                        kde_xa, kde_ya = _kde(dfa["attendance"].values)
+                        if len(kde_xa):
+                            fig3b.add_trace(go.Scatter(
+                                x=kde_xa, y=kde_ya, mode="lines",
+                                name="Curva de Densidad KDE",
+                                line=dict(color=COLOR_LIME, width=2.5),
+                                hovertemplate="Densidad KDE: %{y:.2e}<extra></extra>",
+                            ))
                         for xv, lbl, col in [(m_a,  f"Media: {m_a:,.0f}",  "#F8FAFC"),
                                               (q75a, f"P75: {q75a:,.0f}",  COLOR_MUTED),
                                               (q90a, f"P90: {q90a:,.0f}",  COLOR_LIME)]:
@@ -146,9 +186,14 @@ def Tab2_FanZones(df: pd.DataFrame):
                         fig3b.update_layout(**BASE_LAYOUT,
                             xaxis=dict(title="Espectadores", showgrid=False, tickformat=",",
                                        tickfont=dict(size=9, color=COLOR_MUTED)),
-                            yaxis=dict(title="Encuentros", showgrid=True, gridcolor="#1C2840",
+                            yaxis=dict(title="Densidad de Probabilidad", showgrid=True,
+                                       gridcolor="#1C2840",
                                        tickfont=dict(size=10, color=COLOR_MUTED)),
-                            showlegend=False, height=300, bargap=.08)
+                            legend=dict(orientation="h", yanchor="bottom", y=1.02,
+                                        xanchor="right", x=1,
+                                        bgcolor="rgba(0,0,0,0)",
+                                        font=dict(color=COLOR_MUTED, size=9)),
+                            showlegend=True, height=300, bargap=.08)
                         solara.FigurePlotly(fig3b)
                         InsightBox(
                             f"🌆 <b>{psta:.1f}%</b> de partidos superan P75 "

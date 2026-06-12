@@ -32,6 +32,16 @@
 
 ---
 
+## Fuente de Datos
+
+**Dataset:** [FIFA Football World Cup — Kaggle (piterfm)](https://www.kaggle.com/datasets/piterfm/fifa-football-world-cup)
+
+Histórico completo de **964 partidos** de la Copa del Mundo FIFA (1930–2022). Incluye goles por partido, asistencia, equipos, sedes y resultados por fase. Variables numéricas: `total_goals`, `attendance`, `home_goals`, `away_goals` (4+). Variables categóricas: `stage`, `city`, `home_team`, `away_team` (4+).
+
+> Los CSVs originales no se incluyen en el repositorio. El dataset está disponible públicamente en el link de Kaggle. Sin los archivos locales, la app activa automáticamente el **Modo Demo** con datos sintéticos de distribución equivalente.
+
+---
+
 ## Descripción General
 
 **World Cup Sync** es un dashboard de analítica interactivo construido con **Solara** que combina 92 años de datos históricos del Mundial FIFA (1930–2022) con un análisis prospectivo del torneo en curso. La plataforma está diseñada para responder preguntas de negocio concretas en dos frentes:
@@ -67,6 +77,27 @@ La app sigue una estructura narrativa de consultoría: los primeros 5 tabs cuent
 
 ---
 
+## ¿Por qué Solara y no Streamlit o Power BI?
+
+La elección de **[Solara](https://solara.dev)** tiene dos motivaciones que se refuerzan mutuamente: una personal y una técnica.
+
+**Motivación de diseño:** este proyecto nace de una convicción sobre cómo deben comunicarse los datos a una audiencia no técnica — con jerarquía visual clara, animaciones que guíen la atención y una paleta de color coherente que refuerce el mensaje. Herramientas como Power BI o Streamlit imponen estilos predefinidos que limitan ese control. Solara permite construir cada componente visual desde cero en Python puro, con el mismo nivel de detalle que tendría una aplicación web profesional: colores exactos, tipografía, transiciones, layout responsivo. Para un proyecto orientado al storytelling ejecutivo, esa libertad de diseño no es un lujo — es parte del argumento.
+
+**Motivación técnica:** más allá del diseño, Solara resuelve limitaciones concretas de las alternativas:
+
+| Criterio | Streamlit | Power BI | **Solara** ✓ |
+|----------|-----------|----------|--------------|
+| Modelo de ejecución | Re-ejecuta todo el script en cada interacción | Motor DAX cerrado | **Reactivo por componente** — solo re-renderiza lo que cambia |
+| Integración con Plotly | Parcial (sin control de estado entre gráficos) | No nativo | **Nativa** — `FigurePlotly` + `plotly_iframe` con animaciones completas |
+| Control visual y CSS | Mínimo | Nulo desde código | **Total** — paleta, tipografía, layout y animaciones personalizadas |
+| Animaciones con `go.Frame` | No soportadas | No disponibles | **Soporte completo** — animaciones ▶/⏸ en todos los gráficos |
+| Código modular | Script monolítico | Archivo `.pbix` binario | **Módulos Python** — separación clara de datos, componentes y páginas |
+| Despliegue | Streamlit Cloud (limitado) | Power BI Service (requiere licencia) | **Render / Docker** — imagen portable, sin dependencia de plataforma |
+
+> Solara fue aprobado como alternativa equivalente a Streamlit para este proyecto por el equipo docente.
+
+---
+
 ## Detalle de cada tab
 
 <details>
@@ -75,6 +106,7 @@ La app sigue una estructura narrativa de consultoría: los primeros 5 tabs cuent
 - **Evolución de goles** — gráfico animado (▶/⏸) de línea + área con media móvil de 3 ediciones, rango min/max y anotaciones del campeón por edición
 - **Tarjetas de inteligencia** — una card por edición con sede, campeón, subcampeón, goleador y asistencia total del torneo
 - **Insight CDN** — identifica el pico histórico y sugiere filtrar a 2010–2022 para proyecciones operativas precisas
+- **Gobernanza de Datos** — sección expandible con 4 sesgos identificados (temporal, formato, asistencia, geográfico) con severidad y mitigaciones, y enlace al Notebook de Sesgos
 
 </details>
 
@@ -82,8 +114,8 @@ La app sigue una estructura narrativa de consultoría: los primeros 5 tabs cuent
 <summary><strong>🌆 Fan Zones y Venues</strong></summary>
 
 - **Top 12 ciudades por afluencia promedio** — gráfico animado de barras horizontales con pico individual por ciudad
-- **Probabilidad de saturación streaming** — histograma de goles/partido con umbrales P75 y P90 como alertas CDN
-- **Probabilidad de saturación Fan Zone** — histograma de asistencia con umbral P75 como alerta operativa
+- **Distribución estadística con curva KDE** — histograma de goles/partido normalizado a densidad de probabilidad con curva Gaussian KDE (ancho de banda Silverman) y umbrales P75/P90 como alertas CDN
+- **Distribución de afluencia con curva KDE** — histograma de asistencia con curva de densidad superpuesta y umbral P75 como alerta operativa Fan Zone
 - **Top 10 estadios** — benchmarks de afluencia promedio por recinto, con colorscale azul→lima
 
 </details>
@@ -213,15 +245,15 @@ Los datos del Modo Demo **no son inventados** — provienen del dataset real:
 
 ### Qué se incluye en cada entorno
 
-| Archivo | GitHub | Docker Hub | Descripción |
-|---------|:------:|:----------:|-------------|
-| `data/matches.csv` | ❌ | ❌ | Dataset original (privado) |
-| `data/world_cup.csv` | ❌ | ❌ | Dataset original (privado) |
-| `data/matches_limpio.csv` | ❌ | ❌ | Generado por EDA.ipynb |
-| `data/demo_data.py` | ✅ | ✅ | Datos demo empaquetados |
-| `notebooks/EDA.ipynb` | ✅ | ❌ | Análisis exploratorio |
-| `app.py` | ✅ | ✅ | Aplicación principal |
-| `Dockerfile` | ✅ | — | Definición de la imagen |
+| Archivo | GitHub | Docker Hub | Render | Descripción |
+|---------|:------:|:----------:|:------:|-------------|
+| `data/matches.csv` | ❌ | ❌ | ❌ | Dataset original (privado) |
+| `data/world_cup.csv` | ❌ | ❌ | ❌ | Dataset original (privado) |
+| `data/matches_limpio.csv` | ❌ | ❌ | ❌ | Generado por EDA.ipynb |
+| `data/demo_data.py` | ✅ | ✅ | ✅ | Datos demo empaquetados |
+| `notebooks/EDA.ipynb` | ✅ | ❌ | ❌ | Análisis exploratorio |
+| `app.py` | ✅ | ✅ | ✅ | Aplicación principal |
+| `Dockerfile` | ✅ | — | ✅ | Definición de la imagen |
 
 </details>
 
@@ -352,6 +384,7 @@ World-Cup-Sync/
 | Widgets reactivos | ipyvuetify, ipywidgets | 1.11.3 / 8.1.8 |
 | Servidor ASGI | uvicorn + starlette | 0.49.0 / 1.2.1 |
 | Contenedores | Docker | — |
+| Despliegue cloud | [Render](https://render.com) | — |
 | CI/CD | GitHub Actions → GitHub Pages | — |
 
 ### Esquema de datos

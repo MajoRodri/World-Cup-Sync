@@ -381,7 +381,10 @@ def Tab6_Festivales(df: pd.DataFrame):
                    sel["ciudad"], sel["ubicacion"], "lime")
             solara.HTML("div", unsafe_innerHTML=f"""
                 <div style="background:{COLOR_STEEL};border:1px solid {pais_color}22;
-                    border-radius:12px;padding:20px 22px;margin-bottom:12px;">
+                    border-radius:12px;padding:20px 22px;margin-bottom:12px;
+                    position:relative;overflow:hidden;">
+                    <div style="position:absolute;top:12px;right:16px;font-size:3rem;
+                        line-height:1;pointer-events:none;">{sel['flag']}</div>
 
                     <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:18px;">
                         {reg_badge}
@@ -597,6 +600,7 @@ def Tab6_Festivales(df: pd.DataFrame):
         h = _city_history(f)
         comp_rows.append({
             "ciudad":    f["ciudad"],
+            "label":     f"{f['flag']} {f['ciudad']}",
             "pais":      f["pais"],
             "hist_avg":  h.get("avg", 0),
             "cap_est":   f["capacidad_est"],
@@ -606,7 +610,7 @@ def Tab6_Festivales(df: pd.DataFrame):
 
     hist_df  = comp_df[comp_df["hist_avg"] > 0].reset_index(drop=True)
     n_comp   = len(hist_df)
-    all_cities = comp_df["ciudad"].tolist()
+    all_cities = comp_df["label"].tolist()
 
     bar_colors = [
         _hex_alpha(PAIS_COLOR.get(p, COLOR_MUTED), 0.60)
@@ -615,7 +619,7 @@ def Tab6_Festivales(df: pd.DataFrame):
 
     def _comp_bar(sub, cols):
         return go.Bar(
-            y=sub["ciudad"].tolist(),
+            y=sub["label"].tolist(),
             x=sub["hist_avg"].tolist(),
             orientation="h",
             name="Afluencia histórica (promedio FIFA)",
@@ -634,7 +638,7 @@ def Tab6_Festivales(df: pd.DataFrame):
         fig_comp = go.Figure()
 
     fig_comp.add_trace(go.Scatter(
-        y=comp_df["ciudad"].tolist(),
+        y=comp_df["label"].tolist(),
         x=comp_df["cap_est"].tolist(),
         mode="markers",
         name="Capacidad estimada Festival 2026",

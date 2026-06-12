@@ -284,6 +284,8 @@ World-Cup-Sync/
 
 ### Esquema de datos
 
+**Fuente:** [FIFA Football World Cup — Kaggle](https://www.kaggle.com/datasets/piterfm/fifa-football-world-cup)
+
 | Archivo | Descripción | Columnas Clave |
 |---------|-------------|----------------|
 | `matches_limpio.csv` | Más de 1,000 partidos depurados | year, stage_clean, home_team, away_team, home_goals, away_goals, total_goals, attendance, city, stadium |

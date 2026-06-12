@@ -172,6 +172,17 @@ PAIS_SYMBOL = {
 }
 
 
+_PAIS_CODES = {"México": "mx", "Canadá": "ca", "EE.UU.": "us"}
+
+
+def _flag_img(pais: str, height: int = 28) -> str:
+    code = _PAIS_CODES.get(pais, "")
+    if not code:
+        return ""
+    return (f'<img src="https://flagcdn.com/w40/{code}.png" '
+            f'style="height:{height}px;border-radius:3px;object-fit:cover;" />')
+
+
 def _hex_alpha(hex_color: str, alpha: float) -> str:
     h = hex_color.lstrip("#")
     r, g, b = int(h[0:2], 16), int(h[2:4], 16), int(h[4:6], 16)
@@ -383,8 +394,8 @@ def Tab6_Festivales(df: pd.DataFrame):
                 <div style="background:{COLOR_STEEL};border:1px solid {pais_color}22;
                     border-radius:12px;padding:20px 22px;margin-bottom:12px;
                     position:relative;overflow:hidden;">
-                    <div style="position:absolute;top:12px;right:16px;font-size:3rem;
-                        line-height:1;pointer-events:none;">{sel['flag']}</div>
+                    <div style="position:absolute;top:12px;right:16px;
+                        line-height:1;pointer-events:none;">{_flag_img(sel['pais'], height=32)}</div>
 
                     <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:18px;">
                         {reg_badge}
@@ -600,7 +611,7 @@ def Tab6_Festivales(df: pd.DataFrame):
         h = _city_history(f)
         comp_rows.append({
             "ciudad":    f["ciudad"],
-            "label":     f"{f['flag']} {f['ciudad']}",
+            "label":     f["ciudad"],
             "pais":      f["pais"],
             "hist_avg":  h.get("avg", 0),
             "cap_est":   f["capacidad_est"],

@@ -12,37 +12,46 @@ from app.constants import (
 from app.components import QBlock, InsightBox, plotly_iframe
 
 
-_HOST_FLAGS: dict[str, str] = {
-    "Uruguay":              "🇺🇾",
-    "Italy":                "🇮🇹",
-    "France":               "🇫🇷",
-    "Brazil":               "🇧🇷",
-    "Switzerland":          "🇨🇭",
-    "Sweden":               "🇸🇪",
-    "Chile":                "🇨🇱",
-    "England":              "🏴󠁧󠁢󠁥󠁮󠁧󠁿",
-    "United Kingdom":       "🇬🇧",
-    "Mexico":               "🇲🇽",
-    "West Germany":         "🇩🇪",
-    "Germany":              "🇩🇪",
-    "Argentina":            "🇦🇷",
-    "Spain":                "🇪🇸",
-    "United States":        "🇺🇸",
-    "USA":                  "🇺🇸",
-    "South Korea / Japan":  "🇰🇷🇯🇵",
-    "Japan":                "🇯🇵",
-    "Korea Republic":       "🇰🇷",
-    "South Africa":         "🇿🇦",
-    "Russia":               "🇷🇺",
-    "Qatar":                "🇶🇦",
+_HOST_CODES: dict[str, str] = {
+    "Uruguay":       "uy",
+    "Italy":         "it",
+    "France":        "fr",
+    "Brazil":        "br",
+    "Switzerland":   "ch",
+    "Sweden":        "se",
+    "Chile":         "cl",
+    "England":       "gb",
+    "United Kingdom":"gb",
+    "Mexico":        "mx",
+    "West Germany":  "de",
+    "Germany":       "de",
+    "Argentina":     "ar",
+    "Spain":         "es",
+    "United States": "us",
+    "USA":           "us",
+    "Korea Republic":"kr",
+    "Japan":         "jp",
+    "South Africa":  "za",
+    "Russia":        "ru",
+    "Qatar":         "qa",
 }
+
+_CDN = "https://flagcdn.com/w40/{code}.png"
 
 
 def _host_flag(host: str) -> str:
-    for key, flag in _HOST_FLAGS.items():
-        if key.lower() in host.lower():
-            return flag
-    return "🌍"
+    host_l = host.lower()
+    codes = [c for k, c in _HOST_CODES.items() if k.lower() in host_l]
+    codes = list(dict.fromkeys(codes))   # deduplicate preserving order
+    if not codes:
+        return ""
+    imgs = "".join(
+        f'<img src="{_CDN.format(code=c)}" '
+        f'style="height:22px;border-radius:3px;object-fit:cover;'
+        f'display:inline-block;margin-left:2px;" />'
+        for c in codes
+    )
+    return f'<span style="display:inline-flex;align-items:center;">{imgs}</span>'
 
 
 @solara.component

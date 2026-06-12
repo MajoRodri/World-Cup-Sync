@@ -25,6 +25,7 @@ from app.pages.festivales import Tab6_Festivales
 
 @solara.component
 def Page():
+    solara.Title("World Cup Sync")
     year_range,      set_year_range      = solara.use_state((yr_min, yr_max))
     selected_stages, set_selected_stages = solara.use_state(stages_all[:])
     selected_team,   set_selected_team   = solara.use_state("— Todos —")

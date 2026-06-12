@@ -26,6 +26,12 @@ from app.pages.festivales import Tab6_Festivales
 @solara.component
 def Page():
     solara.Title("World Cup Sync")
+    with solara.AppBar():
+        solara.HTML("div", unsafe_innerHTML=(
+            '<img src="/static/public/trionda.png" '
+            'style="height:30px;width:auto;border-radius:4px;'
+            'display:block;margin-right:4px;" />'
+        ))
     year_range,      set_year_range      = solara.use_state((yr_min, yr_max))
     selected_stages, set_selected_stages = solara.use_state(stages_all[:])
     selected_team,   set_selected_team   = solara.use_state("— Todos —")
@@ -213,24 +219,6 @@ def Page():
         # ── Footer ────────────────────────────────────────────────────────────
         solara.HTML("div", unsafe_innerHTML=f"""
             <hr style="border:none;border-top:1px solid {COLOR_LIME}18;margin:32px 0 12px;">
-
-            <div style="display:flex;align-items:center;gap:10px;
-                background:{COLOR_STEEL};border:1px solid {COLOR_RED}30;
-                border-left:3px solid {COLOR_RED};border-radius:8px;
-                padding:13px 18px;margin-bottom:12px;">
-                <span style="font-size:1.6rem;flex-shrink:0;">⚠️</span>
-                <div>
-                    <p style="color:{COLOR_RED};font-size:.62rem;font-weight:700;
-                        text-transform:uppercase;letter-spacing:1.5px;margin:0 0 4px;">
-                        Nota de Gobernanza · Sesgo de Época</p>
-                    <p style="color:{COLOR_TEXT};font-size:.76rem;line-height:1.7;margin:0;">
-                        Este cuadro abarca <b>92 años de competencia FIFA (1930–2022)</b>.
-                        Los promedios históricos <b>no deben usarse directamente como insumo
-                        operativo</b> sin filtrar por período reciente (2010–2022). Aforos
-                        pre-1970 carecen de metodología verificable.</p>
-                </div>
-            </div>
-
             <div style="display:flex;align-items:center;justify-content:center;
                 gap:16px;flex-wrap:wrap;padding:8px 0;">
                 <span style="font-size:1.4rem;animation:float-ball 5s ease-in-out infinite;

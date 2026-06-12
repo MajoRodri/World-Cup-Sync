@@ -166,6 +166,7 @@ def Tab1_ResumenEjecutivo(df: pd.DataFrame, wc: pd.DataFrame, year_range: tuple)
         f"filtra 2010–2022 para proyecciones operativas.", "red"
     )
 
+    _C_ORANGE = "#FF8C00"
     solara.HTML("div", unsafe_innerHTML=f"""
         <details style="margin-top:20px;">
             <summary style="cursor:pointer;list-style:none;display:flex;align-items:center;
@@ -184,52 +185,121 @@ def Tab1_ResumenEjecutivo(df: pd.DataFrame, wc: pd.DataFrame, year_range: tuple)
             <div style="border:1px solid {COLOR_RED}40;border-top:none;border-radius:0 0 8px 8px;
                 padding:16px 18px 14px;background:rgba(232,0,45,0.03);">
                 <p style="font-size:.62rem;color:{COLOR_MUTED};margin:0 0 12px;">
-                    Limitaciones críticas del dataset — leer antes de tomar decisiones estratégicas
+                    8 limitaciones del dataset FIFA 1930–2022 — relevantes antes de tomar decisiones estratégicas
                 </p>
                 <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px;">
+
                     <div style="background:rgba(232,0,45,0.07);border:1px solid rgba(232,0,45,0.35);
                         border-radius:8px;padding:12px 14px;">
-                        <div style="font-size:.70rem;font-weight:700;color:{COLOR_RED};margin-bottom:4px;">
+                        <div style="font-size:.70rem;font-weight:700;color:{COLOR_RED};margin-bottom:5px;">
                             🔴 Sesgo Temporal — CRÍTICO
                         </div>
                         <div style="font-size:.61rem;color:{COLOR_MUTED};line-height:1.75;">
-                            La media global (2.82 g/p) sobreestima la era streaming en
+                            El fútbol de 1930–60 anotaba casi el doble de goles — las tácticas defensivas
+                            modernas cambiaron el juego por completo. Mezclar esas eras distorsiona
+                            cualquier proyección: la media global sobreestima el espectáculo actual en
                             <b style="color:#F8FAFC">+9.9%</b>.
-                            Filtrar a <b style="color:{COLOR_LIME}">2010–2022</b> para proyecciones CDN.
+                            → Solo <b style="color:{COLOR_LIME}">2010–2022</b> para proyecciones CDN.
                         </div>
                     </div>
+
                     <div style="background:rgba(232,0,45,0.07);border:1px solid rgba(232,0,45,0.35);
                         border-radius:8px;padding:12px 14px;">
-                        <div style="font-size:.70rem;font-weight:700;color:{COLOR_RED};margin-bottom:4px;">
+                        <div style="font-size:.70rem;font-weight:700;color:{COLOR_RED};margin-bottom:5px;">
                             🔴 Sesgo de Formato — CRÍTICO
                         </div>
                         <div style="font-size:.61rem;color:{COLOR_MUTED};line-height:1.75;">
-                            Ediciones 1930–1950 tenían 17–22 partidos vs. 64 actuales (CV &gt; 60%).
-                            Comparar solo ediciones <b style="color:{COLOR_LIME}">≥ 52 partidos (1982+)</b>.
+                            Comparar una edición de 17 partidos con una de 64 es estadísticamente inválido:
+                            muestras tan pequeñas tienen altísima aleatoriedad. Las primeras ediciones
+                            (CV &gt; 60%) pueden variar drásticamente solo por azar.
+                            → Solo ediciones <b style="color:{COLOR_LIME}">≥ 52 partidos (1982+)</b> son fiables.
                         </div>
                     </div>
+
                     <div style="background:rgba(232,0,45,0.07);border:1px solid rgba(232,0,45,0.35);
                         border-radius:8px;padding:12px 14px;">
-                        <div style="font-size:.70rem;font-weight:700;color:{COLOR_RED};margin-bottom:4px;">
+                        <div style="font-size:.70rem;font-weight:700;color:{COLOR_RED};margin-bottom:5px;">
                             🔴 Sesgo de Asistencia — CRÍTICO
                         </div>
                         <div style="font-size:.61rem;color:{COLOR_MUTED};line-height:1.75;">
-                            Datos pre-1966 sin auditoría oficial. Récord Maracanã 1950
-                            (<b style="color:#F8FAFC">173,850 esp.</b>) no verificado.
-                            Filtrar <b style="color:{COLOR_LIME}">post-1970</b> para Fan Zones.
+                            Los aforos anteriores a 1966 son estimaciones sin auditoría oficial —
+                            nadie los verificó formalmente. El récord del Maracanã 1950
+                            (<b style="color:#F8FAFC">173,850 esp.</b>) probablemente incluye gente
+                            en los alrededores. Usarlo como benchmark de aforo sería un riesgo de seguridad.
+                            → Solo <b style="color:{COLOR_LIME}">post-1970</b> para Fan Zones.
                         </div>
                     </div>
+
                     <div style="background:rgba(205,255,0,0.04);border:1px solid rgba(205,255,0,0.25);
                         border-radius:8px;padding:12px 14px;">
-                        <div style="font-size:.70rem;font-weight:700;color:{COLOR_LIME};margin-bottom:4px;">
+                        <div style="font-size:.70rem;font-weight:700;color:{COLOR_LIME};margin-bottom:5px;">
                             🟡 Sesgo Geográfico — ALTO
                         </div>
                         <div style="font-size:.61rem;color:{COLOR_MUTED};line-height:1.75;">
-                            Europa representa el <b style="color:#F8FAFC">53.4%</b> de participaciones históricas.
-                            África y Asia con representación suficiente solo desde
-                            <b style="color:{COLOR_LIME}">2002</b>.
+                            El <b style="color:#F8FAFC">53.4%</b> del dataset histórico son equipos europeos.
+                            África y Asia prácticamente no existían antes de 2002.
+                            Usar datos históricos para proyectar audiencias en mercados emergentes
+                            como MENA o Asia lleva a conclusiones incorrectas.
+                            → Segmentar por región; usar <b style="color:{COLOR_LIME}">post-2010</b>.
                         </div>
                     </div>
+
+                    <div style="background:rgba(205,255,0,0.04);border:1px solid rgba(205,255,0,0.25);
+                        border-radius:8px;padding:12px 14px;">
+                        <div style="font-size:.70rem;font-weight:700;color:{COLOR_LIME};margin-bottom:5px;">
+                            🟡 Ventaja de Local — ALTO
+                        </div>
+                        <div style="font-size:.61rem;color:{COLOR_MUTED};line-height:1.75;">
+                            En 1930–60, el equipo que jugaba en su propio país ganaba el
+                            <b style="color:#F8FAFC">84%</b> de los partidos. Hoy ese número es el 41%.
+                            Esto infla artificialmente los registros históricos de Brasil, Uruguay e
+                            Italia, que ganaron sus Mundiales jugando en casa.
+                            → Normalizar por era al comparar rendimiento de equipos.
+                        </div>
+                    </div>
+
+                    <div style="background:rgba(205,255,0,0.04);border:1px solid rgba(205,255,0,0.25);
+                        border-radius:8px;padding:12px 14px;">
+                        <div style="font-size:.70rem;font-weight:700;color:{COLOR_LIME};margin-bottom:5px;">
+                            🟡 Varianza Muestral — ALTO
+                        </div>
+                        <div style="font-size:.61rem;color:{COLOR_MUTED};line-height:1.75;">
+                            Con pocas muestras, un solo partido atípico mueve la media de toda la edición.
+                            Las primeras 5 ediciones (1930–1954) tienen tanta variabilidad que sus
+                            promedios no son representativos — si se jugaran de nuevo, los números
+                            serían completamente distintos.
+                            → Excluir ediciones con CV &gt; 60%; reportar con IC 95%.
+                        </div>
+                    </div>
+
+                    <div style="background:rgba(255,140,0,0.05);border:1px solid rgba(255,140,0,0.30);
+                        border-radius:8px;padding:12px 14px;">
+                        <div style="font-size:.70rem;font-weight:700;color:{_C_ORANGE};margin-bottom:5px;">
+                            🟠 Estructura de Fases — MEDIO
+                        </div>
+                        <div style="font-size:.61rem;color:{COLOR_MUTED};line-height:1.75;">
+                            El formato del torneo cambió varias veces: en 1950 no hubo Final (el
+                            campeón se decidió en ronda de grupos); en 1974 y 1978 no existieron
+                            los Cuartos de Final. Comparar estadísticas por fase entre ediciones
+                            distintas puede no tener sentido.
+                            → Usar solo <b style="color:{_C_ORANGE}">ediciones 1986+</b> para análisis por fase.
+                        </div>
+                    </div>
+
+                    <div style="background:rgba(255,140,0,0.05);border:1px solid rgba(255,140,0,0.30);
+                        border-radius:8px;padding:12px 14px;">
+                        <div style="font-size:.70rem;font-weight:700;color:{_C_ORANGE};margin-bottom:5px;">
+                            🟠 Sesgo de Sede — MEDIO
+                        </div>
+                        <div style="font-size:.61rem;color:{COLOR_MUTED};line-height:1.75;">
+                            La región anfitriona determina patrones de asistencia completamente distintos
+                            (Europa ~55K; África ~38K; CONCACAF ~50K). El Mundial 2026 se jugará en
+                            <b style="color:#F8FAFC">USA, México y Canadá</b>.
+                            → La referencia válida para 2026 son
+                            <b style="color:{_C_ORANGE}">1970, 1986 y 1994</b> (misma región, CONCACAF).
+                        </div>
+                    </div>
+
                 </div>
                 <div style="display:flex;align-items:center;justify-content:space-between;
                     padding:8px 12px;background:{COLOR_NAVY};border-radius:6px;">

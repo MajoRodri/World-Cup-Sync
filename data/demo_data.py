@@ -1,11 +1,8 @@
-"""
-Datos sintéticos para modo demo — se usan cuando los CSVs reales no están disponibles.
-
-"""
+# Datos sintéticos para demo / Synthetic demo data — activados cuando los CSVs reales no existen / used when real CSVs are missing.
 import numpy as np
 import pandas as pd
 
-# ── Valores válidos de stage_clean — NO modificar ─────────────────────────────
+# ── Etapas válidas de torneo — NO modificar / Valid stages — DO NOT edit ─────
 VALID_STAGES = [
     "Fase de Grupos",
     "Eliminatorias",
@@ -21,9 +18,9 @@ STAGE_MATCHES = {
     "Final":            1,
 }
 
-# ── Ediciones — puedes editar cualquier valor ──────────────────────────────────
+# ── Ediciones / Editions — editable ──────────────────────────────────────────
 EDITIONS = [
-    #  año    sede             campeón        subcampeón        goleador
+    #  año/year  sede/host        campeón/champion  subcampeón/runner-up  goleador/scorer
     (1930, "Uruguay",      "Uruguay",      "Argentina",      "Guillermo Stábile"),
     (1934, "Italy",        "Italy",        "Czechoslovakia", "Oldřich Nejedlý"),
     (1938, "France",       "Italy",        "Hungary",        "Leônidas"),
@@ -48,7 +45,7 @@ EDITIONS = [
     (2022, "Qatar",        "Argentina",    "France",         "Kylian Mbappé"),
 ]
 
-# ── Equipos — puedes agregar o quitar ─────────────────────────────────────────
+# ── Equipos / Teams — puedes agregar o quitar / add or remove ────────────────
 TEAMS = [
     "Brazil", "Germany", "Italy", "France", "Argentina", "England",
     "Spain", "Netherlands", "Uruguay", "Portugal", "Croatia", "Belgium",
@@ -56,7 +53,7 @@ TEAMS = [
     "Morocco", "Australia", "USA", "Poland", "Switzerland", "Denmark",
 ]
 
-# ── Ciudades y estadios por sede — puedes editar ──────────────────────────────
+# ── Ciudades y estadios / Cities and stadiums — editable ─────────────────────
 CITIES_BY_HOST = {
     "Uruguay":       [("Montevideo",      "Estadio Centenario")],
     "Italy":         [("Rome",            "Stadio Olimpico"),    ("Milan",         "San Siro")],
@@ -77,7 +74,7 @@ CITIES_BY_HOST = {
     "Qatar":         [("Lusail",          "Lusail Stadium"),     ("Al Rayyan",     "Education City")],
 }
 
-# ── Afluencia base por año — puedes editar los números ───────────────────────
+# ── Afluencia base por año / Base attendance per year — editable ─────────────
 ATT_BASE = {
     1930: 25000, 1934: 35000, 1938: 40000, 1950: 55000, 1954: 38000,
     1958: 32000, 1962: 30000, 1966: 45000, 1970: 52000, 1974: 55000,
@@ -87,7 +84,7 @@ ATT_BASE = {
 }
 
 
-# ── Generadores ───────────────────────────────────────────────────────────────
+# ── Generadores de datos / Data generators ────────────────────────────────────
 
 def make_matches_df(seed: int = 42) -> pd.DataFrame:
     rng = np.random.default_rng(seed)
@@ -121,7 +118,7 @@ def make_matches_df(seed: int = 42) -> pd.DataFrame:
 
     df = pd.DataFrame(rows)
 
-    # Forzar tipos — garantiza que el app nunca falle por tipo incorrecto
+    # Forzar tipos correctos / Enforce dtypes — evita fallos de tipo en el app
     df["year"]        = df["year"].astype(int)
     df["home_goals"]  = df["home_goals"].astype(int)
     df["away_goals"]  = df["away_goals"].astype(int)
@@ -141,7 +138,7 @@ def make_wc_df() -> pd.DataFrame:
             "Host":       host,
             "Champion":   champion,
             "Runner-Up":  runner_up,
-            "TopScorrer": top_scorer,       # doble r — coincide con el app
+            "TopScorrer": top_scorer,       # doble r — coincide con el CSV / matches CSV column name
             "Attendance": ATT_BASE.get(year, 45000) * n_matches,
             "Matches":    n_matches,
         })

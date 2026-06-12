@@ -224,5 +224,5 @@ data/*.csv
 *_tmp.txt
 *.tmp
 
-# HTML exportado de notebooks
-notebooks/*.html
+# HTML exportado de notebooks — se suben para GitHub Pages
+# notebooks/*.html

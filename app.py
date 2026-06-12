@@ -1,5 +1,5 @@
 # =============================================================================
-# WORLD CUP SYNC 
+# WORLD CUP SYNC — Dashboard analítico / Analytics dashboard
 # =============================================================================
 
 import base64 as _b64mod
@@ -16,15 +16,15 @@ st.set_page_config(
     initial_sidebar_state="expanded",
 )
 
-# ── Paleta "Copa del Mundo" · Transmisión Oficial FIFA ───────────────────────
+# ── Paleta de colores / Color palette ────────────────────────────────────────
 COLOR_RED   = "#E8002D"
-COLOR_LIME  = "#CDFF00"   # Flash Lime — acento principal
-COLOR_BLUE  = "#1565C0"   # Royal Blue corporativo
-COLOR_WHITE = "#F8FAFC"   # Bone White — texto principal
-COLOR_NAVY  = "#0D1321"   # Corporate Navy — fondo app
-COLOR_STEEL = "#1D2436"   # Steel Blue — tarjetas y bloques
-COLOR_MUTED = "#8899B0"   # Texto secundario/apagado
-COLOR_TEXT  = "#C8D8E8"   # Cuerpo de texto
+COLOR_LIME  = "#CDFF00"   # Flash Lime — main accent / acento principal
+COLOR_BLUE  = "#1565C0"   # Corporate Royal Blue / azul corporativo
+COLOR_WHITE = "#F8FAFC"   # Bone White — main text / texto principal
+COLOR_NAVY  = "#0D1321"   # Corporate Navy — app background / fondo
+COLOR_STEEL = "#1D2436"   # Steel Blue — cards & panels / tarjetas
+COLOR_MUTED = "#8899B0"   # Muted text / texto secundario
+COLOR_TEXT  = "#C8D8E8"   # Body text / cuerpo de texto
 
 PLOT_BG  = "rgba(13,19,33,0.92)"
 PAPER_BG = "rgba(0,0,0,0)"
@@ -38,20 +38,20 @@ BASE_LAYOUT = dict(
     margin=dict(t=60, b=45, l=15, r=15),
 )
 
-# ── Pre-compute slider ball SVG ──────────────────────────────────────────────
+# ── SVG del balón para el slider / Slider ball SVG ───────────────────────────
 _BALL_B64 = _b64mod.b64encode(
     b'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 28 28">'
     b'<text x="1" y="24" font-size="24">\xe2\x9a\xbd</text></svg>'
 ).decode()
 
-# ── Logo ──────────────────────────────────────────────────────────────────────
+# ── Logo de la app / App logo ────────────────────────────────────────────────
 try:
     with open("docs/LogoWorldCup.png", "rb") as _logo_f:
         _LOGO_SRC = f"data:image/png;base64,{_b64mod.b64encode(_logo_f.read()).decode()}"
 except FileNotFoundError:
     _LOGO_SRC = None
 
-# ── CSS ───────────────────────────────────────────────────────────────────────
+# ── Estilos globales / Global styles ─────────────────────────────────────────
 st.markdown(f"""
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap');
@@ -760,7 +760,7 @@ hr {{ border-color:{COLOR_LIME}18 !important; }}
 """, unsafe_allow_html=True)
 
 
-# ── Data loading ──────────────────────────────────────────────────────────────
+# ── Carga de datos / Data loading ────────────────────────────────────────────
 @st.cache_data(show_spinner="Cargando base de datos FIFA…")
 def load_matches(path):
     df = pd.read_csv(path)
@@ -801,7 +801,7 @@ if _DEMO_MODE:
     )
 
 
-# ── Sidebar ───────────────────────────────────────────────────────────────────
+# ── Panel lateral de filtros / Filter sidebar ────────────────────────────────
 with st.sidebar:
     if _LOGO_SRC:
         st.markdown(
@@ -899,7 +899,7 @@ with st.sidebar:
     )
 
 
-# ── Reactive filter ───────────────────────────────────────────────────────────
+# ── Filtro reactivo / Reactive filter ────────────────────────────────────────
 if not selected_stages:
     st.warning("⚠️ Selecciona al menos una **Fase** en el panel lateral.")
     st.stop()
@@ -919,7 +919,7 @@ if df.empty:
     st.stop()
 
 
-# ── Hero banner ───────────────────────────────────────────────────────────────
+# ── Banner principal / Hero banner ───────────────────────────────────────────
 stages_label = (", ".join(selected_stages) if len(selected_stages) <= 3
                 else f"{len(selected_stages)} fases")
 team_label   = (f"&nbsp;·&nbsp; <b style='color:{COLOR_LIME};'>{selected_team}</b>"
@@ -960,7 +960,7 @@ st.markdown(
 )
 
 
-# ── KPI row ───────────────────────────────────────────────────────────────────
+# ── Fila de KPIs / KPI row ───────────────────────────────────────────────────
 total_matches = len(df)
 avg_goals     = df["total_goals"].mean()
 att_df        = df.dropna(subset=["attendance"])
@@ -1002,7 +1002,7 @@ for col, card_cls, lbl_cls, icon, label, value, sub in [
 st.markdown("<br>", unsafe_allow_html=True)
 
 
-# ── Pre-computations for storytelling ─────────────────────────────────────────
+# ── Métricas de contexto para storytelling / Context metrics for storytelling ─
 _df_mod  = df[df["year"] >= 2010]["total_goals"]
 _df_hist = df[df["year"] <= 1966]["total_goals"]
 era_modern     = float(_df_mod.mean())  if not _df_mod.empty  else avg_goals
@@ -1026,7 +1026,7 @@ final_avg_goals  = float(_final_row["avg_goals_st"].values[0])  if not _final_ro
 grupos_avg_goals = float(_grupos_row["avg_goals_st"].values[0]) if not _grupos_row.empty else 0
 
 
-# ── Tabs ──────────────────────────────────────────────────────────────────────
+# ── Pestañas principales / Main tabs ─────────────────────────────────────────
 tab1, tab2, tab3, tab4, tab5 = st.tabs([
     "  📊  Resumen Ejecutivo  ",
     "  🌆  Fan Zones y Venues  ",
@@ -1037,7 +1037,7 @@ tab1, tab2, tab3, tab4, tab5 = st.tabs([
 
 
 # ═════════════════════════════════════════════════════════════════════════════
-# TAB 1 — RESUMEN EJECUTIVO
+# TAB 1 — RESUMEN EJECUTIVO / EXECUTIVE SUMMARY
 # ═════════════════════════════════════════════════════════════════════════════
 with tab1:
 
@@ -1122,7 +1122,7 @@ with tab1:
         unsafe_allow_html=True,
     )
 
-    # ── Edition context cards ─────────────────────────────────────────────────
+    # ── Tarjetas por edición / Edition context cards ──────────────────────────
     if not wc_df.empty:
         wc_period = (wc_df[wc_df["Year"].between(*year_range)]
                      .sort_values("Year", ascending=False))
@@ -1167,7 +1167,7 @@ with tab1:
 
 
 # ═════════════════════════════════════════════════════════════════════════════
-# TAB 2 — FAN ZONES Y VENUES
+# TAB 2 — FAN ZONES Y VENUES / FAN ZONES & VENUES
 # ═════════════════════════════════════════════════════════════════════════════
 with tab2:
     col_l, col_r = st.columns(2, gap="large")
@@ -1326,7 +1326,7 @@ with tab2:
 
 
 # ═════════════════════════════════════════════════════════════════════════════
-# TAB 3 — ANÁLISIS POR FASE
+# TAB 3 — ANÁLISIS POR FASE / PHASE ANALYSIS
 # ═════════════════════════════════════════════════════════════════════════════
 with tab3:
 
@@ -1419,7 +1419,7 @@ with tab3:
 
 
 # ═════════════════════════════════════════════════════════════════════════════
-# TAB 4 — EQUIPOS
+# TAB 4 — EQUIPOS / TEAMS
 # ═════════════════════════════════════════════════════════════════════════════
 with tab4:
     hs  = df[["year","home_team","home_goals","away_goals"]].copy()
@@ -1558,7 +1558,7 @@ with tab4:
 
 
 # ═════════════════════════════════════════════════════════════════════════════
-# TAB 5 — MATCH EXPLORER
+# TAB 5 — MATCH EXPLORER / EXPLORADOR DE PARTIDOS
 # ═════════════════════════════════════════════════════════════════════════════
 with tab5:
 
@@ -1607,7 +1607,7 @@ with tab5:
 
 
 # ═════════════════════════════════════════════════════════════════════════════
-# ── Governance ────────────────────────────────────────────────────────────────
+# ── Gobernanza de datos / Data governance ────────────────────────────────────
 st.markdown("---")
 st.markdown(
     f'<div style="background:{COLOR_STEEL};border:1px solid {COLOR_RED}30;border-left:3px solid {COLOR_RED};'
@@ -1623,7 +1623,7 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-# ── Footer ────────────────────────────────────────────────────────────────────
+# ── Pie de página / Footer ───────────────────────────────────────────────────
 st.markdown("---")
 st.markdown(
     f"<p style='text-align:center;color:{COLOR_MUTED};font-size:.68rem;line-height:2;'>"

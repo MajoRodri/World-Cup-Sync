@@ -26,11 +26,14 @@ from app.pages.festivales import Tab6_Festivales
 @solara.component
 def Page():
     solara.Title("World Cup Sync")
-    with solara.AppBar():
+    with solara.AppBarTitle():
         solara.HTML("div", unsafe_innerHTML=(
+            '<div style="display:flex;align-items:center;gap:10px;">'
             '<img src="/static/public/trionda.png" '
-            'style="height:30px;width:auto;border-radius:4px;'
-            'display:block;margin-right:4px;" />'
+            'style="height:30px;width:auto;" />'
+            '<span style="font-size:.95rem;font-weight:800;'
+            'letter-spacing:2px;color:#F8FAFC;">WORLD CUP SYNC</span>'
+            '</div>'
         ))
     year_range,      set_year_range      = solara.use_state((yr_min, yr_max))
     selected_stages, set_selected_stages = solara.use_state(stages_all[:])

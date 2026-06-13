@@ -1,5 +1,6 @@
 # Página 6 — Fan Festivals 2026 / Page 6 — Fan Festivals 2026
 
+import os
 import pandas as pd
 import plotly.graph_objects as go
 import solara
@@ -13,7 +14,56 @@ from app.constants import (
 from app.components import QBlock, InsightBox, plotly_iframe
 from app.data import df_raw
 
-FESTIVALS = [
+_FLAG = {"México": "🇲🇽", "Canadá": "🇨🇦", "EE.UU.": "🇺🇸"}
+
+_CSV_ALIASES = {
+    "Ciudad de México": ["Mexico City", "Ciudad de México", "Ciudad de Mexico"],
+    "Guadalajara":      ["Guadalajara"],
+    "Monterrey":        ["Monterrey"],
+    "Toronto":          ["Toronto"],
+    "Vancouver":        ["Vancouver"],
+    "Atlanta":          ["Atlanta"],
+    "Boston":           ["Boston", "Foxborough", "Foxboro"],
+    "Houston":          ["Houston"],
+    "Kansas City":      ["Kansas City"],
+    "Los Ángeles":      ["Los Angeles", "Pasadena"],
+    "Miami":            ["Miami", "Miami Gardens"],
+    "Filadelfia":       ["Philadelphia"],
+    "Nueva York":       ["New York/New Jersey"],
+}
+
+_CSV_PATH = os.path.normpath(
+    os.path.join(os.path.dirname(__file__), "..", "..", "data", "fan_fests_2026.csv")
+)
+
+
+def _load_festivals():
+    if os.path.exists(_CSV_PATH):
+        df = pd.read_csv(_CSV_PATH, encoding="utf-8-sig")
+        result = []
+        for _, row in df.iterrows():
+            ciudad = row["Ciudad"]
+            result.append(dict(
+                ciudad=ciudad,
+                pais=row["Pais"],
+                flag=_FLAG.get(row["Pais"], ""),
+                ubicacion=row["Ubicacion"],
+                fechas=row["Fechas"],
+                acceso=row["Acceso"],
+                registro=bool(row["Registro"]),
+                vip=bool(row["VIP"]),
+                capacidad_est=int(row["Capacidad_est"]),
+                highlights=row["Highlights"],
+                restricciones=row["Restricciones"],
+                lat=float(row["Latitud"]),
+                lon=float(row["Longitud"]),
+                csv_aliases=_CSV_ALIASES.get(ciudad, [ciudad]),
+            ))
+        return result
+    return _FESTIVALS_FALLBACK
+
+
+_FESTIVALS_FALLBACK = [
     dict(
         ciudad="Ciudad de México", pais="México", flag="🇲🇽",
         ubicacion="Zócalo · Plaza de la Constitución",
@@ -158,6 +208,8 @@ FESTIVALS = [
         csv_aliases=["New York/New Jersey"],
     ),
 ]
+
+FESTIVALS = _load_festivals()
 
 PAIS_COLOR = {
     "México": COLOR_LIME,

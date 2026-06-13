@@ -2,8 +2,10 @@ name: Deploy Notebooks to GitHub Pages
 
 on:
   push:
-    branches: [main]
-    paths: [notebooks/**]
+    branches:
+      - main
+    paths:
+      - notebooks/**
   workflow_dispatch:
 
 permissions:

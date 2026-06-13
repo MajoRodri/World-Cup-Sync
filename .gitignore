@@ -217,8 +217,9 @@ __marimo__/
 # Solara
 .solara/
 
-# Datos privados
+# Datos privados (excluir todos los CSV excepto los públicos)
 data/*.csv
+!data/fan_fests_2026.csv
 
 # Archivos temporales
 *_tmp.txt

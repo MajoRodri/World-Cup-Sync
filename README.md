@@ -34,11 +34,13 @@
 
 ## Fuente de Datos
 
-**Dataset:** [FIFA Football World Cup — Kaggle (piterfm)](https://www.kaggle.com/datasets/piterfm/fifa-football-world-cup)
+**Dataset histórico:** [FIFA Football World Cup — Kaggle (piterfm)](https://www.kaggle.com/datasets/piterfm/fifa-football-world-cup)
 
 Histórico completo de **964 partidos** de la Copa del Mundo FIFA (1930–2022). Incluye goles por partido, asistencia, equipos, sedes y resultados por fase. Variables numéricas: `total_goals`, `attendance`, `home_goals`, `away_goals` (4+). Variables categóricas: `stage`, `city`, `home_team`, `away_team` (4+).
 
 > Los CSVs originales no se incluyen en el repositorio. El dataset está disponible públicamente en el link de Kaggle. Sin los archivos locales, la app activa automáticamente el **Modo Demo** con datos sintéticos de distribución equivalente.
+
+**Dataset Fan Festivals 2026:** extraído mediante web scraping de la web oficial de la FIFA con Playwright (`scripts/scrape_fan_fests.py`). El resultado se guarda en `data/fan_fests_2026.csv` — 13 ciudades × 12 campos (ubicación, fechas, capacidad estimada, tipo de acceso, coordenadas geográficas, etc.).
 
 ---
 
@@ -250,6 +252,8 @@ Los datos del Modo Demo **no son inventados** — provienen del dataset real:
 | `data/matches.csv` | ❌ | ❌ | ❌ | Dataset original (privado) |
 | `data/world_cup.csv` | ❌ | ❌ | ❌ | Dataset original (privado) |
 | `data/matches_limpio.csv` | ❌ | ❌ | ❌ | Generado por EDA.ipynb |
+| `data/fan_fests_2026.csv` | ✅ | ✅ | ✅ | Resultado del scraping Fan Festivals |
+| `scripts/scrape_fan_fests.py` | ✅ | ❌ | ❌ | Scraper Playwright (ejecución local) |
 | `data/demo_data.py` | ✅ | ✅ | ✅ | Datos demo empaquetados |
 | `notebooks/EDA.ipynb` | ✅ | ❌ | ❌ | Análisis exploratorio |
 | `app.py` | ✅ | ✅ | ✅ | Aplicación principal |
@@ -276,13 +280,19 @@ source env/bin/activate     # macOS / Linux
 # 3. Instalar dependencias
 pip install -r requirements.txt
 
-# 4. Colocar los datasets originales en data/
+# 4. Instalar el navegador de Playwright (necesario para el scraper)
+playwright install chromium
+
+# 5. Colocar los datasets originales en data/
 #    data/matches.csv  y  data/world_cup.csv
 
-# 5. Ejecutar el notebook EDA (genera data/matches_limpio.csv)
+# 6. Ejecutar el notebook EDA (genera data/matches_limpio.csv)
 jupyter notebook notebooks/EDA.ipynb
 
-# 6. Lanzar la app
+# 7. (Opcional) Regenerar el CSV de Fan Festivals desde la web de la FIFA
+python scripts/scrape_fan_fests.py
+
+# 8. Lanzar la app
 solara run app.py
 ```
 
@@ -354,7 +364,10 @@ World-Cup-Sync/
 │       ├── equipos.py             # Tab 4 — Equipos
 │       ├── explorer.py            # Tab 5 — Match Explorer
 │       └── festivales.py          # Tab 6 — Oportunidad 2026 (Fan Festivals)
+├── scripts/
+│   └── scrape_fan_fests.py        # Web scraper Playwright — extrae Fan Festivals 2026 de la FIFA
 ├── data/
+│   ├── fan_fests_2026.csv         # Resultado del scraping — 13 Fan Festivals, 12 campos
 │   ├── demo_data.py               # Generador de datos demo (incluido en Docker)
 │   ├── matches.csv                # Dataset original — NO se sube (privado)
 │   ├── world_cup.csv              # Dataset original — NO se sube (privado)
@@ -383,6 +396,7 @@ World-Cup-Sync/
 | Álgebra numérica | [NumPy](https://numpy.org) | 2.4.6 |
 | Widgets reactivos | ipyvuetify, ipywidgets | 1.11.3 / 8.1.8 |
 | Servidor ASGI | uvicorn + starlette | 0.49.0 / 1.2.1 |
+| Web Scraping | [Playwright](https://playwright.dev/python/) | latest |
 | Contenedores | Docker | — |
 | Despliegue cloud | [Render](https://render.com) | — |
 | CI/CD | GitHub Actions → GitHub Pages | — |
@@ -396,7 +410,7 @@ World-Cup-Sync/
 | `matches_limpio.csv` | ~1,000+ partidos | `year`, `stage_clean`, `home_team`, `away_team`, `home_goals`, `away_goals`, `total_goals`, `attendance`, `city`, `stadium` |
 | `world_cup.csv` | 22 ediciones | `Year`, `Host`, `Champion`, `Runner-Up`, `TopScorer`, `Attendance`, `Matches` |
 
-**Fuente prospectiva (Tab 6):** datos del Fan Festival 2026 hardcodeados en `app/pages/festivales.py` — ubicaciones, fechas, capacidad estimada, requisitos de acceso y artistas confirmados para las 13 ciudades sede.
+**Fuente prospectiva (Tab 6):** datos del Fan Festival 2026 extraídos de la web oficial de la FIFA mediante el scraper `scripts/scrape_fan_fests.py` (Playwright) y guardados en `data/fan_fests_2026.csv`. Los mismos datos se integran en `app/pages/festivales.py` para la visualización interactiva — ubicaciones, fechas, capacidad estimada, requisitos de acceso y artistas confirmados para las 13 ciudades sede.
 
 > **Nota de Gobernanza:** Las cifras de asistencia anteriores a 1970 pueden contener inconsistencias metodológicas. Para proyecciones operativas se recomienda filtrar a **2010–2022** usando el slider del sidebar.
 
@@ -440,6 +454,16 @@ docker run -p 8766:8765 majorodri/world-cup-sync
 ### El Modo Demo muestra un banner de aviso
 
 Es el comportamiento correcto. El banner `⚠️ Modo Demo` confirma que la app no encontró los CSVs privados y está usando datos sintéticos. Todos los filtros y visualizaciones funcionan normalmente, excepto que el Tab 6 mostrará "Sin historial" para todas las ciudades (ya que no hay datos reales cargados).
+
+### Error al ejecutar el scraper (`playwright install` requerido)
+
+Playwright necesita descargar el navegador por separado después del `pip install`:
+
+```bash
+playwright install chromium
+```
+
+Si el scraper no detecta tarjetas dinámicas en la web de la FIFA (la estructura HTML puede cambiar), carga automáticamente los datos manuales incorporados en el script — el CSV resultante es el mismo.
 
 ### Gráficos no renderizan / pantalla en blanco
 

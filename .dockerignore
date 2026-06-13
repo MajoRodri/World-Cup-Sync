@@ -18,5 +18,6 @@ docs/
 *.log
 
 data/*.csv
+!data/fan_fests_2026.csv
 .solara/
 README.md

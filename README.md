@@ -19,6 +19,12 @@
 
 ## Demo
 
+
+
+https://github.com/user-attachments/assets/8f02f3ff-4960-49ff-86f9-95144e64bcc5
+
+
+
 **App en vivo:** [https://world-cup-sync.onrender.com](https://world-cup-sync.onrender.com)
 
 > Desplegada en Render. Si el servidor está inactivo puede tardar ~30 segundos en despertar en la primera carga.
